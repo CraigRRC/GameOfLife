@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer cellSpriteRenderer;
     public Cell[] cellNeighbors;
+    private CellState cellState;
 
     public void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
+       cellSpriteRenderer = GetComponent<SpriteRenderer>();
+       cellState = CellState.Dead;
        
     }
 
@@ -19,5 +20,13 @@ public class Cell : MonoBehaviour
    
     }
 
+    public SpriteRenderer GetCellSpriteRenderer() { return cellSpriteRenderer; }
+    public CellState GetCellState() {  return cellState; }
 
+}
+
+public enum CellState
+{
+    Dead,
+    Alive
 }

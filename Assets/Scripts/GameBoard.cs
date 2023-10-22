@@ -9,8 +9,9 @@ public class GameBoard : MonoBehaviour
     public Camera cam;
     public float boardTimer = 0f;
 
-
+    
     public Cell[][] board;
+    public Cell[][] futureGen;
     public Cell cell;
     
 
@@ -20,9 +21,9 @@ public class GameBoard : MonoBehaviour
 
         Vector3 newCameraPosition = new Vector3(arraySize / 2f, arraySize / 2f - 0.4f, cam.transform.position.z);
         cam.transform.position = newCameraPosition;
-        
 
         board = new Cell[arraySize][];
+        futureGen = new Cell[arraySize][];
         // create grid of cells
         for (int i = 0; i < board.Length; i++)
         {
@@ -35,8 +36,7 @@ public class GameBoard : MonoBehaviour
             }
         }
         //Board has been created. Now, we need to loop through this array again and find out how many neighbors they have.
-
-        
+        //Fill Cell Neighbors
         for (int i = 0; i < board.Length; i++)
         {
             for (int j = 0; j < board[i].Length; j++)
@@ -51,7 +51,7 @@ public class GameBoard : MonoBehaviour
                 }
                 if (j + 1 <= arraySize - 1)
                 {
-                    board[i][j].cellNeighbors[1] = board[i][j + 1];  //top
+                    board[i][j].cellNeighbors[1] = board[i][j + 1];     //top
                 }
                 if (i + 1 <= arraySize - 1 && j + 1 <= arraySize - 1)
                 {
@@ -79,7 +79,26 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
+        //Need to check the rules of life first on the seed before moving to the next generation.
 
+
+
+
+
+
+
+
+
+        //Create new board based on the current generation board to put the calculation results into.
+        for (int i = 0; i < board.Length; i++)
+        {
+            futureGen[i] = new Cell[arraySize];
+
+            for (int j = 0; j < board[i].Length; j++)
+            {
+                futureGen[i][j] = board[i][j];
+            }
+        }
     }
 
     public void GameBoardUpdate()

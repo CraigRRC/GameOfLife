@@ -6,22 +6,25 @@ public class Cell : MonoBehaviour
 {
     private SpriteRenderer cellSpriteRenderer;
     public Cell[] cellNeighbors;
-    private CellState cellState;
+    public CellState cellState;
+    public int liveNeighbourCount = 0;
+    public int deadNeighbourCount = 0;
 
     public void Awake()
     {
-       cellSpriteRenderer = GetComponent<SpriteRenderer>();
-       cellState = CellState.Dead;
-       
+        cellSpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
-   
+
     }
 
-    public SpriteRenderer GetCellSpriteRenderer() { return cellSpriteRenderer; }
+    public void SetCellColor(Color color) { this.cellSpriteRenderer.color = color; }
     public CellState GetCellState() {  return cellState; }
+    public void SetCellState(CellState cellState) { this.cellState = cellState; }
+
+    public Color GetSpriteRenderer() { return cellSpriteRenderer.color;}
 
 }
 

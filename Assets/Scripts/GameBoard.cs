@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -244,13 +245,28 @@ public class GameBoard : MonoBehaviour
 
     private void Update()
     {
+        
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mouseToWorldPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-            //Loop through the board
-            //check the X and Y of my mouse
-            //Floor it
-            //line them up with the board i and j
+            Debug.Log(mouseToWorldPoint.x);
+            Debug.Log(mouseToWorldPoint.y);
+            if(Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x)) < arraySize && Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x)) >= 0 && Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y)) < arraySize && Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y)) >= 0)
+            {
+               
+                if (board[Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x))][Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y))].cellState == CellState.Alive)
+                {
+                   
+                    futureGen[Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x))][Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y))].cellState = CellState.Dead;
+                    futureGen[Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x))][Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y))].SetCellColor(Color.gray);
+                }
+                else
+                {
+                    futureGen[Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x))][Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y))].cellState = CellState.Alive;
+                    futureGen[Mathf.Max(Mathf.RoundToInt(mouseToWorldPoint.x), 0)][Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y))].SetCellColor(Color.yellow);
+                }
+            }
         }
 
         

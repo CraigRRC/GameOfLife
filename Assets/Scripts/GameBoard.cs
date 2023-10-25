@@ -99,7 +99,6 @@ public class GameBoard : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(board[i][j].deadNeighbourCount);
                     if (board[i][j].liveNeighbourCount == 3)
                     {
                         //Reproduction.
@@ -231,8 +230,6 @@ public class GameBoard : MonoBehaviour
                     board[i][j].SetCellState(CellState.Dead);
                     board[i][j].SetCellColor(Color.gray);
                 }
-                
-
             }
         }
     }
@@ -246,7 +243,22 @@ public class GameBoard : MonoBehaviour
     }
 
     private void Update()
-    {       
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mouseToWorldPoint = cam.ScreenToWorldPoint(Input.mousePosition);
+            //Loop through the board
+            //check the X and Y of my mouse
+            //Floor it
+            //line them up with the board i and j
+        }
+
+        
+        
+
+
+
+
         if(paused) return;
         GameBoardUpdate();
     }

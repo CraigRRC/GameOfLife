@@ -1768,14 +1768,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d55440042d6ba1341a8f209ef71c6f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arraySize: 50
+  arraySize: 35
   cam: {fileID: 1017750079}
-  boardTimer: 0
   generationNumber: {fileID: 622130313}
   generationCounter: 1
   arraySizeUI: {fileID: 2029957459}
   cell: {fileID: -6961855245396462790, guid: d3df0c7a8b744194c961ad9dd4cbc66b, type: 3}
-  timer: 0
   paused: 0
 --- !u!4 &1295233656
 Transform:

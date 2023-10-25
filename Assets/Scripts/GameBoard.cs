@@ -21,10 +21,10 @@ public class GameBoard : MonoBehaviour
         futureGen = new Cell[arraySize][];
         CreateInitialGrid();
         CreateNextGeneration();
-        //Board has been created. Now, we need to loop through this array again and find out how many neighbors they have.
-        //Fill Cell Neighbors
+        // Board has been created. Now, we need to loop through this array again and find out how many neighbors they have.
+        // Fill Cell Neighbors
         FillCellNeighbors();
-        //Need to check the rules of life first on the seed before moving to the next generation.
+        // Need to check the rules of life first on the seed before moving to the next generation.
         // Loop through board and grab the neighbours in the cell. 
         // Loop through the neighbours and grab their enum status.
         // If the neighbours are dead, consider making them null to make the determination much much easier. 
@@ -39,8 +39,6 @@ public class GameBoard : MonoBehaviour
             for (int j = 0; j < futureGen[i].Length; j++)
             {
                 board[i][j] = futureGen[i][j];
-                board[i][j].liveNeighbourCount = 0;
-                board[i][j].deadNeighbourCount = 0;
             }
         }
     }
@@ -55,13 +53,15 @@ public class GameBoard : MonoBehaviour
             for (int j = 0; j < board[i].Length; j++)
             {
                 futureGen[i][j] = board[i][j];
+                board[i][j].liveNeighbourCount = 0;
+                board[i][j].deadNeighbourCount = 0;
             }
         }
     }
 
     private void RulesOfLife()
     {
-        // Determine if that cell should live or die based on it's neighbours
+        // Determine if that cell should live or die based on it's neighbours.
         for (int i = 0; i < board.Length; i++)
         {
             for (int j = 0; j < board[i].Length; j++)
@@ -72,23 +72,18 @@ public class GameBoard : MonoBehaviour
 
                     if (board[i][j].liveNeighbourCount < 2)
                     {
-                        Debug.Log("length < 2");
                         //UnderPopulation
                         futureGen[i][j].SetCellState(CellState.Dead);
                         futureGen[i][j].SetCellColor(Color.gray);
                     }
                     else if (board[i][j].liveNeighbourCount == 2 || board[i][j].liveNeighbourCount == 3)
                     {
-                        Debug.Log("2 or 3");
-                        Debug.Log(board[i][j].liveNeighbourCount);
                         //Lives on
-                        futureGen[i][j].SetCellColor(Color.yellow);
                         futureGen[i][j].SetCellState(CellState.Alive);
-                       
+                        futureGen[i][j].SetCellColor(Color.yellow);
                     }
                     else if (board[i][j].liveNeighbourCount > 3)
                     {
-                        Debug.Log("over 3");
                         //OverPopulation
                         futureGen[i][j].SetCellState(CellState.Dead);
                         futureGen[i][j].SetCellColor(Color.gray);
@@ -96,29 +91,25 @@ public class GameBoard : MonoBehaviour
                 }
                 else
                 {
-                    
-                    if (board[i][j].deadNeighbourCount == 3)
+                    Debug.Log(board[i][j].deadNeighbourCount);
+                    if (board[i][j].liveNeighbourCount == 3)
                     {
                         //Reproduction.
                         futureGen[i][j].SetCellState(CellState.Alive);
+                        futureGen[i][j].SetCellColor(Color.yellow);
                     }
-
                 }
-
             }
         }
     }
-
     private void CountNeighbours()
     {
-        
-
         for (int i = 0; i < board.Length; i++)
         {
-            //loop through each cell array
+            //loop through each cell array.
             for (int j = 0; j < board[i].Length; j++)
             {
-                //loop through each cell in the cell array
+                //loop through each cell in the cell array.
                 for (int k = 0; k < board[i][j].cellNeighbors.Length; k++)
                 {
                     
@@ -187,7 +178,7 @@ public class GameBoard : MonoBehaviour
 
     private void CreateInitialGrid()
     {
-        // Create grid of cells
+        // Create grid of cells.
         for (int i = 0; i < board.Length; i++)
         {
             board[i] = new Cell[arraySize];
@@ -213,7 +204,7 @@ public class GameBoard : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if(timer > 10)
+        if(timer > 3)
         {
             GameBoardUpdate();
             timer = 0;
@@ -222,14 +213,11 @@ public class GameBoard : MonoBehaviour
 
     public void GameBoardUpdate()
     {
-        
         //have this update the game board every second. Not every frame.
         CreateNextGeneration();
         FillCellNeighbors();
         CountNeighbours();
         RulesOfLife();
         UpdateStateOfBoard();
-
-
     }
 }

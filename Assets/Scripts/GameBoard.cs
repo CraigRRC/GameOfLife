@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
@@ -8,14 +10,18 @@ public class GameBoard : MonoBehaviour
     public int arraySize = 25;
     public Camera cam;
     public float boardTimer = 0f;
+    public TextMeshProUGUI generationNumber;
+    public int generationCounter = 1;
     
     public Cell[][] board;
     public Cell[][] futureGen;
     public Cell cell;
     public float timer = 0f;
+    public bool paused = false;
 
     private void Awake()
     {
+        Application.targetFrameRate = 4;
         SetupCamera();
         board = new Cell[arraySize][];
         futureGen = new Cell[arraySize][];
@@ -34,6 +40,8 @@ public class GameBoard : MonoBehaviour
 
     private void UpdateStateOfBoard()
     {
+        generationCounter++;
+        generationNumber.text = generationCounter.ToString();
         for (int i = 0; i < futureGen.Length; i++)
         {
             for (int j = 0; j < futureGen[i].Length; j++)
@@ -125,6 +133,11 @@ public class GameBoard : MonoBehaviour
                             board[i][j].liveNeighbourCount++;
                         }
                     }
+                    else
+                    {
+                        //Edgecase
+                        board[i][j].deadNeighbourCount++;
+                    }
                 }
             }
         }
@@ -176,8 +189,10 @@ public class GameBoard : MonoBehaviour
         }
     }
 
-    private void CreateInitialGrid()
+    public void CreateInitialGrid()
     {
+        generationCounter = 1;
+        generationNumber.text = generationCounter.ToString();
         // Create grid of cells.
         for (int i = 0; i < board.Length; i++)
         {
@@ -186,9 +201,38 @@ public class GameBoard : MonoBehaviour
             for (int j = 0; j < board[i].Length; j++)
             {
                 board[i][j] = Instantiate<Cell>(cell, new Vector3(i, j, 0f), Quaternion.identity);
-                board[i][j].SetCellState(CellState.Alive);
-                board[i][j].SetCellColor(Color.yellow);
+                board[i][j].SetCellState(CellState.Dead);
+                board[i][j].SetCellColor(Color.gray);
               
+            }
+        }
+    }
+
+    public void RandomGrid()
+    {
+        generationCounter = 1;
+        generationNumber.text = generationCounter.ToString();
+        // Create grid of cells.
+        for (int i = 0; i < board.Length; i++)
+        {
+            board[i] = new Cell[arraySize];
+
+            for (int j = 0; j < board[i].Length; j++)
+            {
+                board[i][j] = Instantiate<Cell>(cell, new Vector3(i, j, 0f), Quaternion.identity);
+                int decider = UnityEngine.Random.Range(0, 2);
+                if (decider == 0)
+                {
+                    board[i][j].SetCellState(CellState.Alive);
+                    board[i][j].SetCellColor(Color.yellow);
+                }
+                else
+                {
+                    board[i][j].SetCellState(CellState.Dead);
+                    board[i][j].SetCellColor(Color.gray);
+                }
+                
+
             }
         }
     }
@@ -202,13 +246,9 @@ public class GameBoard : MonoBehaviour
     }
 
     private void Update()
-    {
-        timer += Time.deltaTime;
-        if(timer > 3)
-        {
-            GameBoardUpdate();
-            timer = 0;
-        }
+    {       
+        if(paused) return;
+        GameBoardUpdate();
     }
 
     public void GameBoardUpdate()
@@ -219,5 +259,25 @@ public class GameBoard : MonoBehaviour
         CountNeighbours();
         RulesOfLife();
         UpdateStateOfBoard();
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        paused = true;
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        paused = false;
+    }
+
+    public void Step()
+    {
+        paused = true;
+        Time.timeScale = 1;
+        GameBoardUpdate();
+        Time.timeScale = 0;
     }
 }

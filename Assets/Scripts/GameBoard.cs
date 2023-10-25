@@ -250,8 +250,6 @@ public class GameBoard : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mouseToWorldPoint = cam.ScreenToWorldPoint(Input.mousePosition);
-            Debug.Log(mouseToWorldPoint.x);
-            Debug.Log(mouseToWorldPoint.y);
             if(Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x)) < arraySize && Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.x)) >= 0 && Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y)) < arraySize && Mathf.Abs(Mathf.RoundToInt(mouseToWorldPoint.y)) >= 0)
             {
                
@@ -268,12 +266,6 @@ public class GameBoard : MonoBehaviour
                 }
             }
         }
-
-        
-        
-
-
-
 
         if(paused) return;
         GameBoardUpdate();
